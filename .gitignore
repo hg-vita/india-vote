@@ -20,13 +20,10 @@
 
 !ac_tracking_app.py
 !polling_station_summary_normalized.csv
-
-!ocr_env/
-!ocr_env/**
-
-# Also include hyphenated virtualenv if present
-!ocr-env/
-!ocr-env/**
+!eroll_dt_all.py
+!India_AC.geojson
+!check_ac_files_all.py
+!eroll_dt_all.py
 
 !ocr_out/
 !ocr_out/**
