@@ -2,7 +2,7 @@
 india-vote (Independent Network for Democratic Inclusion and Accountability – Voter Oversight &amp; Transparency in Elections) is a civic-tech project focused on building open, reliable, and accessible pipelines around India’s electoral data.
 
 
-##🎯 Goals
+🎯 **Goals**
 
 Enable transparent access to Assembly Constituency (AC) and Part-wise electoral rolls.
 
@@ -12,7 +12,7 @@ Build interactive dashboards & maps (H3 grids, booth-level summaries) to track v
 
 Support automation pipelines for scraping, parsing (OCR), and updating rolls regularly.
 
-##🛠️ Features
+🛠️ **Features**
 
 Automated download & parsing of electoral rolls from the Election Commission of India.
 
@@ -24,7 +24,7 @@ ETL workflows (bronze → silver → gold layers) for clean, research-ready data
 
 CLI & Streamlit apps for AC-level tracking and visualization.
 
-##📦 Tech Stack
+📦 **Tech Stack**
 
 Python (requests, selenium-wire, pandas, geopandas, tesseract/TrOCR, layoutlmv3).
 
@@ -34,6 +34,6 @@ Visualization: Streamlit, H3 hexagon maps, Plotly.
 
 Automation: GitHub Actions for monthly refresh.
 
-##🌍 Impact
+🌍 **Impact**
 
 By making voter roll data more transparent, structured, and accessible, india-vote aims to strengthen civic participation, election monitoring, and democratic accountability in India.
