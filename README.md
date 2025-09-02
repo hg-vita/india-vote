@@ -16,7 +16,7 @@
 - Automated **download & parsing** of electoral rolls from the Election Commission of India.  
 - **OCR & translation pipelines** (Hindi → English) for digitizing voter lists.  
 - **Geospatial integration** with constituency boundaries and polling station locations.  
-- **ETL workflows** (bronze → silver → gold layers) for clean, research-ready datasets.  
+- **ETL workflows** for clean, use-ready datasets.  
 - CLI & Streamlit apps for **AC-level tracking and visualization**.  
 
 ---
