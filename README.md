@@ -13,7 +13,7 @@ The script to download all electoral roll files for a district is located at:
 Run the script with the following command:
 
 ```bash
-python eroll_dt_all.py --s 02 --dt 21
+python scripts/download/eroll_dt_all.py --s 02 --dt 21
 ```
 Note: CAPTCHA will have to reloaded and entered after every roll type is downloaded entirely, and press ENTER in the terminal to continue downloading.
 
