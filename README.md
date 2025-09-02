@@ -2,8 +2,13 @@
 
 **india-vote (Independent Network for Democratic Inclusion and Accountability – Voter Oversight & Transparency in Elections)** is a civic-tech project focused on building open, reliable, and accessible pipelines around India’s electoral data.
 
----
+----
+Scripts to download the files fora an entire district is at scripts/download/eroll_dt_all.py
+Run the scripts to download the data for a district using 
+python eroll_dt_all.py --s 02 --dt 21
 
+Note: CAPTCHA will have to reloaded and entered after every roll type is downloaded entirely, and press ENTER in the terminal to continue downloading.
+----
 ## 🎯 Goals
 - Enable **transparent access** to Assembly Constituency (AC) and Part-wise electoral rolls.  
 - Provide **structured datasets** (CSV/Parquet) for researchers, journalists, and civic groups.  
