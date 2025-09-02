@@ -1,0 +1,1 @@
+[timeout] Model took too long. Try: warm-up (`ollama run llava:7b "ready?"`), reduce --max-side, or increase --timeout.

@@ -1,0 +1,54 @@
+{
+  "electoral_roll_2025": {
+    "assembly_constituency": {
+      "number": "128",
+      "name": "राघोपुर",
+      "reservation": "सामान्य"
+    },
+    "lok_sabha_constituency": {
+      "number": "21",
+      "name": "हाजीपुर",
+      "reservation": "अ० जा०"
+    },
+    "part_number": 331,
+    "revision_details": {
+      "year_of_revision": "2025",
+      "qualification_date": "01-07-2025",
+      "type_of_revision": "विशेष गहन पुनरीक्षण",
+      "date_of_publication": "01-08-2025",
+      "electoral_roll_identity": "विशेष गहन पुनरीक्षण, 2025 के अन्तर्गत दिनांक 01-08-2025 को प्रारूप के रूप में प्रकाशित निर्वाचक सूची"
+    },
+    "divisions_in_part_number_and_name": [
+      {
+        "number": 1,
+        "name": "फतेहपुर नईकीपाड़ी"
+      }
+    ],
+    "address": {
+      "main_city_village": "फतेहपुर",
+      "post_office": "राघोपुर चन्देल",
+      "police_station": "राघोपुर थाना",
+      "tehsil": "राघोपुर",
+      "district": "वैशाली",
+      "pin_code": "844508"
+    },
+    "polling_station_details": {
+      "polling_station_number_and_name": "331 - उत्क्रमित मध्य विद्यालय फतेहपुर नयकापारी कमरा नं०-1",
+      "polling_station_address": "उत्क्रमित मध्य विद्यालय, फतेहपुर नयकापारी",
+      "polling_station_status": "सामान्य",
+      "number_of_auxiliary_polling_stations": 0
+    },
+    "number_of_electors": {
+      "starting_serial": {
+        "number": 1
+      },
+      "ending_serial": {
+        "number": 764
+      },
+      "male": 424,
+      "female": 340,
+      "third_gender": 0,
+      "total": 764
+    }
+  }
+}

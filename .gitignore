@@ -1,0 +1,32 @@
+# Ignore everything by default
+*
+
+# Keep the ignore file itself
+!.gitignore
+
+# Allowlisted files and folders
+!scripts/
+!scripts/download/
+!scripts/download/eroll_dt_all.py
+!scripts/download/cap_parse.py
+!eci_downloads/18_18_-_PALIN
+!eci_downloads/20_20_-_TALI
+
+!downloads/
+!downloads/**
+
+!eci_check_reports/
+!eci_check_reports/**
+
+!ac_tracking_app.py
+!polling_station_summary_normalized.csv
+
+!ocr_env/
+!ocr_env/**
+
+# Also include hyphenated virtualenv if present
+!ocr-env/
+!ocr-env/**
+
+!ocr_out/
+!ocr_out/**
