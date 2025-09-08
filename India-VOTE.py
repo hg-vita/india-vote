@@ -299,9 +299,11 @@ with right_controls:
     ref_df = pd.DataFrame()
     sampled_ac_numbers: List[int] = []
     parts_sample_df = pd.DataFrame()
+    # Normalize Windows-style backslashes to forward slashes for Linux containers
+    csv_path_norm = csv_path.replace("\\", "/")
     if csv_path.strip():
         try:
-            ref_df = load_parts_reference_csv(csv_path)
+            ref_df = load_parts_reference_csv(csv_path_norm)
         except Exception as e:
             st.error(f"Failed to load CSV: {e}")
     if not ref_df.empty:
