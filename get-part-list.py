@@ -399,16 +399,43 @@ def main():
     verbose = bool(args.verbose)
     debug_dir = args.debug_dir or None
     sess = requests.Session()
-    # Build district list
+    # Build district list (prefer DOM selector when API is empty)
     districts = list_districts(sess, state_cd)
-    if not districts:
-        print("No districts returned for state.")
-        return
-    if verbose:
-        info(f"Found {len(districts)} districts for {state_cd}")
-    # Map district code -> name (best effort)
     dist_name_map: Dict[str, str] = {}
     dist_codes: List[str] = []
+    if not districts:
+        # Try DOM parse first
+        if verbose:
+            info("District API returned 0; falling back to DOM selector parse...")
+        html_names = list_district_names_from_page(sess, state_cd, verbose=verbose) or {}
+        if not html_names:
+            # Selenium fallback (headless)
+            html_names = list_district_names_via_selenium(state_cd, headless=True, verbose=verbose) or {}
+        if html_names:
+            dist_name_map = dict(html_names)
+            dist_codes = list(dist_name_map.keys())
+            if verbose:
+                info(f"Using {len(dist_codes)} districts from DOM selector")
+        else:
+            print("No districts available from API or DOM; aborting.")
+            return
+    else:
+        if verbose:
+            info(f"Found {len(districts)} districts for {state_cd}")
+        # Map district code -> name (best effort) from API payload
+        for d in districts:
+            dcd = str(d.get("districtCd") or d.get("districtCode") or d.get("code") or "").strip().upper()
+            if not dcd:
+                # Compose from districtNo when full code not present
+                try:
+                    dno = int(str(d.get("districtNo") or "").strip())
+                    dcd = f"{state_cd}{dno:02d}"
+                except Exception:
+                    dcd = ""
+            dname = (d.get("districtName") or d.get("districtValue") or d.get("name") or d.get("district") or "").strip()
+            if dcd:
+                dist_codes.append(dcd)
+                dist_name_map[dcd] = dname
     if verbose:
         try:
             sample_d = districts[:3]
@@ -418,12 +445,6 @@ def main():
                     info("  keys=", list(row.keys()))
         except Exception:
             pass
-    for d in districts:
-        dcd = str(d.get("districtCd") or d.get("districtCode") or d.get("code") or d.get("district") or "").strip().upper()
-        dname = (d.get("districtName") or d.get("name") or d.get("district") or "").strip()
-        if dcd:
-            dist_codes.append(dcd)
-            dist_name_map[dcd] = dname
     # Enrich names via constituencies endpoint (fills missing or overrides blanks)
     try:
         extra_names = list_district_names_from_constituencies(sess, state_cd)
@@ -447,6 +468,8 @@ def main():
             if v:
                 # Prefer HTML/Selenium-provided names (override API if different)
                 dist_name_map[k] = v
+                if k not in dist_codes:
+                    dist_codes.append(k)
         if verbose:
             # Print a few merged entries to verify
             merged_sample = list(dist_name_map.items())[:10]
@@ -505,12 +528,22 @@ def main():
                     "acId": ac_id if ac_id is not None else (ac_meta.get("acId") if isinstance(ac_meta, dict) else ""),
                 }
                 # First the part payload
-                row.update(p)
+                # Avoid clobbering prefilled identifiers with empty payload values
+                if isinstance(p, dict):
+                    for k, v in p.items():
+                        if k in {"stateCd", "districtCd", "acNumber", "acLabel", "acId", "districtName"}:
+                            # Keep existing non-empty value
+                            if str(row.get(k, "")).strip() and (v is None or str(v).strip() == ""):
+                                continue
+                        row[k] = v
                 # Then merge AC metadata, but do not override existing non-empty cells
                 if isinstance(ac_meta, dict):
                     for k, v in ac_meta.items():
                         if k not in row or row[k] in (None, ""):
                             row[k] = v
+                # Restore districtName from map if it was overwritten by blank payload/meta
+                if not (isinstance(row.get("districtName"), str) and row["districtName"].strip()):
+                    row["districtName"] = dist_name_map.get(district_cd, "")
                 rows.append(row)
     if not rows:
         print("No part rows found across districts/ACs.")
