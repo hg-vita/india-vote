@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: india-vote
+    env: python
+    plan: free
+    region: oregon
+    buildCommand: |
+      pip install -U pip
+      pip install -r requirements.txt
+    startCommand: |
+      streamlit run India-VOTE.py --server.port $PORT --server.headless true --server.address 0.0.0.0
+    autoDeploy: true
+    envVars:
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      - key: STREAMLIT_BROWSER_GATHER_USAGE_STATS
+        value: "false"
+      - key: GEOPANDAS_USE_PYOGRIO
+        value: "1"
