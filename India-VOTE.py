@@ -291,7 +291,7 @@ with right_controls:
         pt_k = 1
     with col_seed:
         st.subheader("Reproducibility")
-        seed_txt = st.text_input("Random seed", value="12345")
+        seed_txt = st.text_input("Random seed", value="")
         rng = np.random.default_rng(None if seed_txt.strip()=="" else int(seed_txt))
         do_sample = st.button("Sample ACs & Parts", use_container_width=True)
 
@@ -299,9 +299,11 @@ with right_controls:
     ref_df = pd.DataFrame()
     sampled_ac_numbers: List[int] = []
     parts_sample_df = pd.DataFrame()
+    # Normalize Windows-style backslashes to forward slashes for Linux containers
+    csv_path_norm = csv_path.replace("\\", "/")
     if csv_path.strip():
         try:
-            ref_df = load_parts_reference_csv(csv_path)
+            ref_df = load_parts_reference_csv(csv_path_norm)
         except Exception as e:
             st.error(f"Failed to load CSV: {e}")
     if not ref_df.empty:
@@ -338,13 +340,39 @@ with right_controls:
     # Show sampled ACs table only on right
     if not ref_df.empty and len(sampled_ac_numbers) > 0:
         st.subheader("Sampled ACs")
-        ac_info_cols = [c for c in ["acNumber", "acLabel", "districtName", "districtCd"] if c in ref_df.columns]
-        if ac_info_cols:
+        # Some reference files may list multiple district codes/names for the same AC
+        # (e.g., administrative changes). Deduplicate strictly by AC number and pick
+        # the most common label/district for display.
+        def _most_common_non_null(s: pd.Series):
+            try:
+                m = s.mode(dropna=True)
+                if m.shape[0] > 0:
+                    return m.iloc[0]
+            except Exception:
+                pass
+            s2 = s.dropna()
+            return s2.iloc[0] if s2.shape[0] > 0 else ""
+
+        # Build aggregation dynamically based on available columns
+        agg: dict = {}
+        if "acLabel" in ref_df.columns:
+            agg["acLabel"] = _most_common_non_null
+        if "districtName" in ref_df.columns:
+            agg["districtName"] = _most_common_non_null
+        if "districtCd" in ref_df.columns:
+            agg["districtCd"] = _most_common_non_null
+
+        ac_subset = ref_df[ref_df["acNumber"].astype("Int64").isin(pd.Series(sampled_ac_numbers, dtype="Int64"))]
+        if agg:
             ac_list_df = (
-                ref_df[ref_df["acNumber"].astype("Int64").isin(pd.Series(sampled_ac_numbers, dtype="Int64"))][ac_info_cols]
-                .drop_duplicates().sort_values(by=["acNumber"]).reset_index(drop=True)
+                ac_subset.groupby("acNumber", as_index=False).agg(agg).sort_values("acNumber").reset_index(drop=True)
             )
-            st.dataframe(ac_list_df, use_container_width=True)
+        else:
+            # Fallback: if only acNumber present
+            ac_list_df = (
+                ac_subset[["acNumber"]].drop_duplicates().sort_values("acNumber").reset_index(drop=True)
+            )
+        st.dataframe(ac_list_df, use_container_width=True)
 
 with left_map:
     # Map metrics and visualization

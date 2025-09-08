@@ -20,3 +20,7 @@
 #!eci_check_reports/part_list_*.csv
 
 # Everything else stays ignored to keep the repo lean
+
+!eci_check_reports/
+!eci_check_reports/part_list_S29_20250907_202919.csv
+
