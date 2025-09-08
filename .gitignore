@@ -4,26 +4,19 @@
 # Keep the ignore file itself
 !.gitignore
 
-# Allowlisted files and folders
-!scripts/
-!scripts/download/
-!scripts/download/eroll_dt_all.py
-!scripts/download/cap_parse.py
-!eci_downloads/18_18_-_PALIN
-!eci_downloads/20_20_-_TALI
+# Only include files relevant to the Streamlit app deployment
+!India-VOTE.py
+!requirements.txt
+!render.yaml
+!README.md
 
-!downloads/
-!downloads/**
-
-!eci_check_reports/
-!eci_check_reports/**
-
-!ac_tracking_app.py
-!polling_station_summary_normalized.csv
-!eroll_dt_all.py
+# Data needed by the Streamlit app
 !India_AC.geojson
-!check_ac_files_all.py
-!eroll_dt_all.py
+!India_AC_hex.geojson
 
-!ocr_out/
-!ocr_out/**
+# Optional: allow a reference CSV if you want to commit it
+# (comment this out if you prefer keeping data local)
+#!eci_check_reports/
+#!eci_check_reports/part_list_*.csv
+
+# Everything else stays ignored to keep the repo lean
